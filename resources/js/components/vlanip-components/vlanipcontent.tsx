@@ -25,7 +25,7 @@ const groupedData = data.reduce((acc, current) => {
 
 
 const Vlanipcontent = () => {
-    const [ipSegmentActive, setIpSegmentActive] = useContext(Context);
+    const [,,,,ipSegmentActive] = useContext(Context);
     console.log("Current IP Segment Active:", ipSegmentActive);
 
     const IpSegment = "160.25.236.";
@@ -109,17 +109,17 @@ const Vlanipcontent = () => {
         <>
             <div className="mb-4 ">
                 <h1 className="text-2xl font-bold">VLANs & IPs Management</h1>
-                <p className="text-gray-600">IP TYPE</p>
-                <div className='flex gap-2'>
-                    <div className={`rounded-2xl shadow-lg ${ipSegmentActive == '160.25.236.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
+                {/* <p className="text-gray-600">IP TYPE</p> */}
+                <div className='flex gap-2 pt-4 pb-2'>
+                    <div className={`rounded-2xl shadow-lg hover:bg-[var(--bg-muted)] ${ipSegmentActive == '160.25.236.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
                         <input id='236' className='hidden' type="radio" value='160.25.236.'/> 
                         <label className='cursor-pointer' htmlFor="236">236</label>
                     </div>
-                    <div className={`rounded-2xl shadow-lg ${ipSegmentActive == '160.25.237.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
+                    <div className={`rounded-2xl shadow-lg hover:bg-[var(--bg-muted-foreground)] ${ipSegmentActive == '160.25.237.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
                         <input id='237' className='hidden' type="radio" value='160.25.237.'/>
                         <label className='cursor-pointer' htmlFor="237">237</label>
                     </div>
-                    <div className={`rounded-2xl shadow-lg ${ipSegmentActive == 'mgmt' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
+                    <div className={`rounded-2xl shadow-lg hover:bg-[var(--bg-muted-foreground)] ${ipSegmentActive == 'mgmt' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
                         <input id='mgmt' className='hidden' type="radio" value='mgmt'/>
                         <label className='cursor-pointer' htmlFor="mgmt">MGMT</label>
                     </div>

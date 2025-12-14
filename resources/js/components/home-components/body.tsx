@@ -5,7 +5,7 @@ import Context from '../../pages/Context'
 
 const body = () => {
 
-  const [currentPage] = useContext(Context);
+  const [,,currentPage] = useContext(Context);
   console.log('current page', currentPage);
 
 

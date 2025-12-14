@@ -5,7 +5,7 @@ import Context from './Context'
 
 const home = () => {
   
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState('vlansips');
   const [ipSegmentActive, setIpSegmentActive] = useState('160.25.236.');
   return (

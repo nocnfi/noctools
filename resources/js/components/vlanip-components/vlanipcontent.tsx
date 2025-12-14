@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, use } from 'react';
+import Context from '../../pages/Context';
 
-// Data dummy IP yang SUDAH TERPAKAI (Unavailable).
-// IP 33-36 memiliki VID 333.
-// IP 96-97 memiliki VID 960.
 const data = [
-    { id: 1, ipSegment: "160.25.236.", ipHost: "33", ipPrefix: "/30", vid: "333" },
-    { id: 2, ipSegment: "160.25.236.", ipHost: "34", ipPrefix: "/30", vid: "333" },
-    { id: 3, ipSegment: "160.25.236.", ipHost: "35", ipPrefix: "/30", vid: "333" },
-    { id: 4, ipSegment: "160.25.236.", ipHost: "36", ipPrefix: "/30", vid: "333" },
-    { id: 5, ipSegment: "160.25.236.", ipHost: "96", ipPrefix: "/31", vid: "960" },
-    { id: 6, ipSegment: "160.25.236.", ipHost: "97", ipPrefix: "/31", vid: "960" },
+    { id: 1, ipSegment: "160.25.236.", ipHost: "33", ipPrefix: "/30", vid: "333", vlanName: "LL.WV-NFI.FREEDOM.NET" },
+    { id: 2, ipSegment: "160.25.236.", ipHost: "34", ipPrefix: "/30", vid: "333", vlanName: "LL.WV-NFI.FREEDOM.NET" },
+    { id: 3, ipSegment: "160.25.236.", ipHost: "35", ipPrefix: "/30", vid: "333", vlanName: "LL.WV-NFI.FREEDOM.NET" },
+    { id: 4, ipSegment: "160.25.236.", ipHost: "36", ipPrefix: "/30", vid: "333", vlanName: "LL.WV-NFI.FREEDOM.NET" },
+    { id: 5, ipSegment: "160.25.236.", ipHost: "96", ipPrefix: "/31", vid: "960", vlanName: "LL.FS-NFI.FREEDOM.NET" },
+    { id: 6, ipSegment: "160.25.236.", ipHost: "97", ipPrefix: "/31", vid: "960", vlanName: "LL.FS-NFI.FREEDOM.NET" },
+    { id: 7, ipSegment: "160.25.236.", ipHost: "101", ipPrefix: "/30", vid: "200", vlanName: "LL.WV-NFI.NADA.NET" },
+    { id: 8, ipSegment: "160.25.236.", ipHost: "102", ipPrefix: "/30", vid: "200", vlanName: "LL.WV-NFI.NADA.NET" },
+    { id: 9, ipSegment: "160.25.236.", ipHost: "103", ipPrefix: "/30", vid: "200", vlanName: "LL.WV-NFI.NADA.NET" },
+    { id: 10, ipSegment: "160.25.236.", ipHost: "104 ", ipPrefix: "/30", vid: "200", vlanName: "LL.WV-NFI.NADA.NET" },
 ];
 
 // Map untuk mengelompokkan data berdasarkan VID
@@ -23,6 +25,9 @@ const groupedData = data.reduce((acc, current) => {
 
 
 const Vlanipcontent = () => {
+    const [ipSegmentActive, setIpSegmentActive] = useContext(Context);
+    console.log("Current IP Segment Active:", ipSegmentActive);
+
     const IpSegment = "160.25.236.";
     const ipTotal = 255;
     let elements = [];
@@ -38,6 +43,7 @@ const Vlanipcontent = () => {
         if (currentIpData) {
             // --- A. TAMPILKAN IP YANG DIGUNAKAN (GABUNG BERDASARKAN VLANID) ---
             const currentVid = currentIpData.vid;
+            const currentVlanName = currentIpData.vlanName;
             const blockStart = i;
             let blockEnd = i;
             
@@ -67,7 +73,7 @@ const Vlanipcontent = () => {
                     <div className='justify-self-start pl-4'>{rangeDisplay}</div>
                     <div className='justify-self-center'>{prefixDisplay}</div> 
                     <div className='justify-self-center'>{currentVid}</div> 
-                    <div className='justify-self-center'>Unavailable</div>
+                    <div className='justify-self-center'>{currentVlanName}</div>
                 </div>
             );
             
@@ -88,13 +94,9 @@ const Vlanipcontent = () => {
 
             // Tambahkan elemen Free Space sebagai satu baris agregasi
             elements.push(
-                <div className="grid grid-cols-4 p-2 bg-gray-500 text-white" key={`free-${blockStart}`}>
+                <div className="grid grid-cols-3 p-2 bg-gray-500 text-white" key={`free-${blockStart}`}>
                     <div className='justify-self-start pl-4'>{rangeDisplay}</div>
-                    {/* Kolom Prefix: KOSONG */}
-                    <div className='justify-self-center'></div> 
-                    {/* Kolom VLANID: KOSONG */}
-                    <div className='justify-self-center'></div> 
-                    <div className='justify-self-center'>Available</div>
+                    <button className='justify-self-center cursor-pointer transition-all duration-300 ease-in-out hover:bg-green-500 px-2 rounded-md'>[+] Add new note</button>
                 </div>
             );
             
@@ -104,18 +106,40 @@ const Vlanipcontent = () => {
 
     // 4. Struktur Rendering (JSX)
     return (
-        <div className="border">
-            {/* HEADER TABLE */}
-            <div className="grid grid-cols-4 font-bold border-b p-2 bg-gray-700 text-white">
-                <div className='justify-self-start pl-4'>IP ADDRESS</div>
-                <div className='justify-self-center'>PREFIX</div>
-                <div className='justify-self-center'>VLANID</div>
-                <div className='justify-self-center'>STATUS</div>
+        <>
+            <div className="mb-4 ">
+                <h1 className="text-2xl font-bold">VLANs & IPs Management</h1>
+                <p className="text-gray-600">IP TYPE</p>
+                <div className='flex gap-2'>
+                    <div className={`rounded-2xl shadow-lg ${ipSegmentActive == '160.25.236.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
+                        <input id='236' className='hidden' type="radio" value='160.25.236.'/> 
+                        <label className='cursor-pointer' htmlFor="236">236</label>
+                    </div>
+                    <div className={`rounded-2xl shadow-lg ${ipSegmentActive == '160.25.237.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
+                        <input id='237' className='hidden' type="radio" value='160.25.237.'/>
+                        <label className='cursor-pointer' htmlFor="237">237</label>
+                    </div>
+                    <div className={`rounded-2xl shadow-lg ${ipSegmentActive == 'mgmt' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
+                        <input id='mgmt' className='hidden' type="radio" value='mgmt'/>
+                        <label className='cursor-pointer' htmlFor="mgmt">MGMT</label>
+                    </div>
+
+                </div>
             </div>
-            
-            {/* BODY TABLE */}
-            {elements.map((e) => e)}
-        </div>
+            <div className="border rounded-2xl shadow-lg overflow-hidden">
+
+                {/* HEADER TABLE */}
+                <div className="grid grid-cols-4 font-bold border-b p-2 bg-gray-700 text-white">
+                    <div className='justify-self-start pl-4'>IP ADDRESS</div>
+                    <div className='justify-self-center'>PREFIX</div>
+                    <div className='justify-self-center'>VLANID</div>
+                    <div className='justify-self-center'>NAME</div>
+                </div>
+                
+                {/* BODY TABLE */}
+                {elements.map((e) => e)}
+            </div>
+        </>
     );
 };
 

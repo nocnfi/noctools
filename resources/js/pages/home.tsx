@@ -7,14 +7,16 @@ const home = () => {
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('vlansips');
-
+  const [ipSegmentActive, setIpSegmentActive] = useState('160.25.236.');
   return (
     <>
         <Context.Provider value={[
           isSidebarOpen,
           setIsSidebarOpen,
           currentPage,
-          setCurrentPage
+          setCurrentPage,
+          ipSegmentActive,
+          setIpSegmentActive
         ]}>
 
           <Header />

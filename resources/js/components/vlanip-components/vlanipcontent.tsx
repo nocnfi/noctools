@@ -25,7 +25,7 @@ const groupedData = data.reduce((acc, current) => {
 
 
 const Vlanipcontent = () => {
-    const [,,,,ipSegmentActive] = useContext(Context);
+    const [,,,,ipSegmentActive, setIpSegmentActive] = useContext(Context);
     console.log("Current IP Segment Active:", ipSegmentActive);
 
     const IpSegment = "160.25.236.";
@@ -69,7 +69,7 @@ const Vlanipcontent = () => {
             const prefixDisplay = currentIpData.ipPrefix; 
 
             elements.push(
-                <div className="grid grid-cols-4 p-2 bg-gray-200 text-black" key={`used-range-${blockStart}`}>
+                <div className="grid grid-cols-4 p-2 bg-transparent text-[var(--secondary-foreground)]" key={`used-range-${blockStart}`}>
                     <div className='justify-self-start pl-4'>{rangeDisplay}</div>
                     <div className='justify-self-center'>{prefixDisplay}</div> 
                     <div className='justify-self-center'>{currentVid}</div> 
@@ -94,7 +94,7 @@ const Vlanipcontent = () => {
 
             // Tambahkan elemen Free Space sebagai satu baris agregasi
             elements.push(
-                <div className="grid grid-cols-3 p-2 bg-gray-500 text-white" key={`free-${blockStart}`}>
+                <div className="grid grid-cols-3 p-2 bg-[var(--transparent-green)] text-[var(--secondary-foreground)]" key={`free-${blockStart}`}>
                     <div className='justify-self-start pl-4'>{rangeDisplay}</div>
                     <button className='justify-self-center cursor-pointer transition-all duration-300 ease-in-out hover:bg-green-500 px-2 rounded-md'>[+] Add new note</button>
                 </div>
@@ -110,17 +110,17 @@ const Vlanipcontent = () => {
             <div className="mb-4 ">
                 <h1 className="text-2xl font-bold">VLANs & IPs Management</h1>
                 {/* <p className="text-gray-600">IP TYPE</p> */}
-                <div className='flex gap-2 pt-4 pb-2'>
-                    <div className={`rounded-2xl shadow-lg hover:bg-[var(--bg-muted)] ${ipSegmentActive == '160.25.236.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
-                        <input id='236' className='hidden' type="radio" value='160.25.236.'/> 
+                <div className='flex gap-2 pt-4 pb-2 transition-all duration-300 ease-in-out'>
+                    <div className={`rounded-2xl shadow-lg ${ipSegmentActive == '160.25.236.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)] hover:bg-[var(--ring)]'} border-2 justify-center items-center w-20 h-8 flex cursor-pointer transition-all duration-300 ease-in-out`} onClick={() => setIpSegmentActive('160.25.236.')}>
+                        <input id='236' className='hidden' type="radio" name="ipSegment" value='160.25.236.' checked={ipSegmentActive === '160.25.236.'} onChange={() => {}}/> 
                         <label className='cursor-pointer' htmlFor="236">236</label>
                     </div>
-                    <div className={`rounded-2xl shadow-lg hover:bg-[var(--bg-muted-foreground)] ${ipSegmentActive == '160.25.237.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
-                        <input id='237' className='hidden' type="radio" value='160.25.237.'/>
+                    <div className={`rounded-2xl shadow-lg ${ipSegmentActive == '160.25.237.' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)] hover:bg-[var(--ring)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer transition-all duration-300 ease-in-out`} onClick={() => setIpSegmentActive('160.25.237.')}>
+                        <input id='237' className='hidden' type="radio" name="ipSegment" value='160.25.237.' checked={ipSegmentActive === '160.25.237.'} onChange={() => {}}/>
                         <label className='cursor-pointer' htmlFor="237">237</label>
                     </div>
-                    <div className={`rounded-2xl shadow-lg hover:bg-[var(--bg-muted-foreground)] ${ipSegmentActive == 'mgmt' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer`}>
-                        <input id='mgmt' className='hidden' type="radio" value='mgmt'/>
+                    <div className={`rounded-2xl shadow-lg ${ipSegmentActive == 'mgmt' ? 'bg-[var(--secondary-foreground)] text-[var(--secondary)]':'bg-transparent text-[var(--secondary-foreground)] hover:bg-[var(--ring)]'} border-2 p-2 justify-center items-center w-20 h-8 flex cursor-pointer transition-all duration-300 ease-in-out`} onClick={() => setIpSegmentActive('mgmt')}>
+                        <input id='mgmt' className='hidden' type="radio" name="ipSegment" value='mgmt' checked={ipSegmentActive === 'mgmt'} onChange={() => {}}/>
                         <label className='cursor-pointer' htmlFor="mgmt">MGMT</label>
                     </div>
 
@@ -129,7 +129,7 @@ const Vlanipcontent = () => {
             <div className="border rounded-2xl shadow-lg overflow-hidden">
 
                 {/* HEADER TABLE */}
-                <div className="grid grid-cols-4 font-bold border-b p-2 bg-gray-700 text-white">
+                <div className="grid grid-cols-4 font-bold border-b p-2 bg-[var(--secondary-foreground)] text-[var(--secondary)]">
                     <div className='justify-self-start pl-4'>IP ADDRESS</div>
                     <div className='justify-self-center'>PREFIX</div>
                     <div className='justify-self-center'>VLANID</div>

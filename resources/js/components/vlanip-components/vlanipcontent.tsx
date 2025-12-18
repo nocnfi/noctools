@@ -1,4 +1,6 @@
-import React, { useState, useContext, use, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { FaCheck, FaTrash } from "react-icons/fa6";
+import { IoClose } from "react-icons/io5";
 import Context from '../../pages/Context';
 
 const allData = [
@@ -171,12 +173,12 @@ const Vlanipcontent = () => {
             </div>
 
             {showPopup && selectedIpData && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h2 className="text-xl font-bold mb-4 text-gray-800">Update IP Information</h2>
-                        <form>
+                <div className="fixed inset-0 bg-[rgba(0,0,0,0.8)] flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out opacity-100">
+                    <div className="bg-white pb-6 rounded-lg rounded-t-3xl shadow-lg w-96 transform scale-100 transition-transform duration-300 ease-in-out">
+                        <h2 className="text-xl font-bold mb-4 text-[var(--secondary)] bg-[var(--secondary-foreground)] w-full p-4 text-center rounded-t-lg">Update IP Information</h2>
+                        <form className='px-6'>
                             <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ipSegment">
+                                <label className="block text-[var(--secondary-foreground)] text-sm font-bold mb-2" htmlFor="ipSegment">
                                     IP Segment
                                 </label>
                                 <input
@@ -185,11 +187,11 @@ const Vlanipcontent = () => {
                                     name="ipSegment"
                                     value={formData.ipSegment}
                                     onChange={(e) => setFormData({ ...formData, ipSegment: e.target.value })}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--secondary-foreground)] leading-tight focus:outline-none focus:shadow-outline"
                                 />
                             </div>
                             <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ipHost">
+                                <label className="block text-[var(--secondary-foreground)] text-sm font-bold mb-2" htmlFor="ipHost">
                                     IP Host
                                 </label>
                                 <input
@@ -198,11 +200,11 @@ const Vlanipcontent = () => {
                                     name="ipHost"
                                     value={formData.ipHost}
                                     onChange={(e) => setFormData({ ...formData, ipHost: e.target.value })}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--secondary-foreground)] leading-tight focus:outline-none focus:shadow-outline"
                                 />
                             </div>
                             <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ipPrefix">
+                                <label className="block text-[var(--secondary-foreground)] text-sm font-bold mb-2" htmlFor="ipPrefix">
                                     IP Prefix
                                 </label>
                                 <input
@@ -211,11 +213,11 @@ const Vlanipcontent = () => {
                                     name="ipPrefix"
                                     value={formData.ipPrefix}
                                     onChange={(e) => setFormData({ ...formData, ipPrefix: e.target.value })}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--secondary-foreground)] leading-tight focus:outline-none focus:shadow-outline"
                                 />
                             </div>
                             <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="vid">
+                                <label className="block text-[var(--secondary-foreground)] text-sm font-bold mb-2" htmlFor="vid">
                                     VLAN ID
                                 </label>
                                 <input
@@ -224,12 +226,15 @@ const Vlanipcontent = () => {
                                     name="vid"
                                     value={formData.vid}
                                     onChange={(e) => setFormData({ ...formData, vid: e.target.value })}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--secondary-foreground)] leading-tight focus:outline-none focus:shadow-outline"
                                 />
                             </div>
-                            <div className="flex justify-end">
-                                <button type="button" onClick={() => setShowPopup(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">Cancel</button>
-                                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update</button>
+                            <div className="flex justify-between">
+                                <button type="button" onClick={() => setShowPopup(false)} className="bg-[var(--secondary-foreground))] hover:bg-[var(--hover-black)] cursor-pointer text-[var(--secondary)] text-sm font-bold py-1 px-4 rounded mr-2 transition-colors duration-300 ease-in-out">Cancel</button>
+                                <div>
+                                    <button type="button" className="bg-red-500 hover:bg-red-700 cursor-pointer text-white font-bold py-2 px-4 rounded mr-2 transition-colors duration-300 ease-in-out"><FaTrash size={18}/></button>
+                                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer transition-colors duration-300 ease-in-out"><FaCheck size={18}/></button>
+                                </div>
                             </div>
                         </form>
                     </div>

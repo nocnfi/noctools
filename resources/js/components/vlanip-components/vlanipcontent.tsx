@@ -1,7 +1,7 @@
-import React, { useState, useContext, use } from 'react';
+import React, { useState, useContext, use, useEffect } from 'react';
 import Context from '../../pages/Context';
 
-const data = [
+const allData = [
     { id: 1, ipSegment: "160.25.236.", ipHost: "33", ipPrefix: "/30", vid: "333", vlanName: "LL.WV-NFI.FREEDOM.NET" },
     { id: 2, ipSegment: "160.25.236.", ipHost: "34", ipPrefix: "/30", vid: "333", vlanName: "LL.WV-NFI.FREEDOM.NET" },
     { id: 3, ipSegment: "160.25.236.", ipHost: "35", ipPrefix: "/30", vid: "333", vlanName: "LL.WV-NFI.FREEDOM.NET" },
@@ -12,29 +12,53 @@ const data = [
     { id: 8, ipSegment: "160.25.236.", ipHost: "102", ipPrefix: "/30", vid: "200", vlanName: "LL.WV-NFI.NADA.NET" },
     { id: 9, ipSegment: "160.25.236.", ipHost: "103", ipPrefix: "/30", vid: "200", vlanName: "LL.WV-NFI.NADA.NET" },
     { id: 10, ipSegment: "160.25.236.", ipHost: "104 ", ipPrefix: "/30", vid: "200", vlanName: "LL.WV-NFI.NADA.NET" },
+    { id: 11, ipSegment: "160.25.237.", ipHost: "150", ipPrefix: "/29", vid: "550", vlanName: "LL.AB-NFI.FREEDOM.NET" },
+    { id: 12, ipSegment: "160.25.237.", ipHost: "151", ipPrefix: "/29", vid: "550", vlanName: "LL.AB-NFI.FREEDOM.NET" },
+    { id: 13, ipSegment: "160.25.237.", ipHost: "152", ipPrefix: "/29", vid: "550", vlanName: "LL.AB-NFI.FREEDOM.NET" },
+    { id: 14, ipSegment: "160.25.237.", ipHost: "153", ipPrefix: "/29", vid: "550", vlanName: "LL.AB-NFI.FREEDOM.NET" },
+    { id: 15, ipSegment: "160.25.237.", ipHost: "154", ipPrefix: "/29", vid: "550", vlanName: "LL.AB-NFI.FREEDOM.NET" },
+    { id: 16, ipSegment: "160.25.237.", ipHost: "155", ipPrefix: "/29", vid: "550", vlanName: "LL.AB-NFI.FREEDOM.NET" },
+    { id: 17, ipSegment: "160.25.237.", ipHost: "200", ipPrefix: "/28", vid: "800", vlanName: "LL.CD-NFI.FREEDOM.NET" },
+    { id: 18, ipSegment: "160.25.237.", ipHost: "201", ipPrefix: "/28", vid: "800", vlanName: "LL.CD-NFI.FREEDOM.NET" },
+    { id: 19, ipSegment: "160.25.237.", ipHost: "202", ipPrefix: "/28", vid: "800", vlanName: "LL.CD-NFI.FREEDOM.NET" },
+    { id: 20, ipSegment: "160.25.237.", ipHost: "203", ipPrefix: "/28", vid: "800", vlanName: "LL.CD-NFI.FREEDOM.NET" },
+    { id: 21, ipSegment: "160.25.237.", ipHost: "204", ipPrefix: "/28", vid: "800", vlanName: "LL.CD-NFI.FREEDOM.NET" },
+    { id: 22, ipSegment: "160.25.237.", ipHost: "205", ipPrefix: "/28", vid: "800", vlanName: "LL.CD-NFI.FREEDOM.NET" },
+    { id: 23, ipSegment: "160.25.237.", ipHost: "206", ipPrefix: "/28", vid: "800", vlanName: "LL.CD-NFI.FREEDOM.NET" },
+    { id: 24, ipSegment: "160.25.237.", ipHost: "207", ipPrefix: "/28", vid: "800", vlanName: "LL.CD-NFI.FREEDOM.NET" },
 ];
-
-// Map untuk mengelompokkan data berdasarkan VID
-const groupedData = data.reduce((acc, current) => {
-    const host = parseInt(current.ipHost);
-    if (!acc[host]) {
-        acc[host] = current;
-    }
-    return acc;
-}, {} as { [key: number]: typeof data[0] });
 
 
 const Vlanipcontent = () => {
     const [,,,,ipSegmentActive, setIpSegmentActive] = useContext(Context);
     console.log("Current IP Segment Active:", ipSegmentActive);
+    
+    const filteredData = allData.filter(item => item.ipSegment === ipSegmentActive);
 
-    const IpSegment = "160.25.236.";
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedIpData, setSelectedIpData] = useState<typeof allData[0] | null>(null);
+    const [formData, setFormData] = useState({ ipSegment: '', ipHost: '', ipPrefix: '', vid: '', vlanName: '' });
+
+    const IpSegment = ipSegmentActive; // Use the active IP segment
     const ipTotal = 255;
     let elements = [];
-
+    
     // 1. Buat Map dari IP yang Digunakan (Unavailable)
-    const usedIpMap = new Map<number, typeof data[0]>();
-    data.forEach(e => usedIpMap.set(parseInt(e.ipHost), e));
+    const usedIpMap = new Map<number, typeof allData[0]>();
+    filteredData.forEach(e => usedIpMap.set(parseInt(e.ipHost), e));
+
+    useEffect(() => {
+        if (selectedIpData) {
+            setFormData({
+                ipSegment: selectedIpData.ipSegment,
+                ipHost: selectedIpData.ipHost,
+                ipPrefix: selectedIpData.ipPrefix,
+                vid: selectedIpData.vid,
+                vlanName: selectedIpData.vlanName,
+            });
+        }
+    }, [selectedIpData]);
+
 
     let i = 0;
     while (i <= ipTotal) {
@@ -69,7 +93,13 @@ const Vlanipcontent = () => {
             const prefixDisplay = currentIpData.ipPrefix; 
 
             elements.push(
-                <div className="grid grid-cols-4 p-2 bg-transparent text-[var(--secondary-foreground)]" key={`used-range-${blockStart}`}>
+                <div
+                    className="grid grid-cols-4 p-2 bg-transparent text-[var(--secondary-foreground)] hover:bg-[var(--ring)] cursor-pointer transition-all duration-300 ease-in-out"
+                    key={`used-range-${blockStart}`}
+                    onClick={() => {
+                        setSelectedIpData(currentIpData);
+                        setShowPopup(true);
+                    }}>
                     <div className='justify-self-start pl-4'>{rangeDisplay}</div>
                     <div className='justify-self-center'>{prefixDisplay}</div> 
                     <div className='justify-self-center'>{currentVid}</div> 
@@ -80,7 +110,7 @@ const Vlanipcontent = () => {
             i = blockEnd + 1; // Lompati ke IP setelah blok VID yang baru saja diagregasi
 
         } else {
-            // --- B. AGREGASI FREE SPACE (SELURUH BLOK KONTIGU) ---
+            // --- B. AGREGASI FREE SPACE (SELURUH BLOK KO NTIGU) ---
             let blockStart = i;
             let currentFreeBlockSize = 0;
 
@@ -139,6 +169,72 @@ const Vlanipcontent = () => {
                 {/* BODY TABLE */}
                 {elements.map((e) => e)}
             </div>
+
+            {showPopup && selectedIpData && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h2 className="text-xl font-bold mb-4 text-gray-800">Update IP Information</h2>
+                        <form>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ipSegment">
+                                    IP Segment
+                                </label>
+                                <input
+                                    type="text"
+                                    id="ipSegment"
+                                    name="ipSegment"
+                                    value={formData.ipSegment}
+                                    onChange={(e) => setFormData({ ...formData, ipSegment: e.target.value })}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ipHost">
+                                    IP Host
+                                </label>
+                                <input
+                                    type="text"
+                                    id="ipHost"
+                                    name="ipHost"
+                                    value={formData.ipHost}
+                                    onChange={(e) => setFormData({ ...formData, ipHost: e.target.value })}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ipPrefix">
+                                    IP Prefix
+                                </label>
+                                <input
+                                    type="text"
+                                    id="ipPrefix"
+                                    name="ipPrefix"
+                                    value={formData.ipPrefix}
+                                    onChange={(e) => setFormData({ ...formData, ipPrefix: e.target.value })}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="vid">
+                                    VLAN ID
+                                </label>
+                                <input
+                                    type="text"
+                                    id="vid"
+                                    name="vid"
+                                    value={formData.vid}
+                                    onChange={(e) => setFormData({ ...formData, vid: e.target.value })}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                />
+                            </div>
+                            <div className="flex justify-end">
+                                <button type="button" onClick={() => setShowPopup(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2">Cancel</button>
+                                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
